@@ -1,5 +1,45 @@
 <html>
 <body>
-	<input type='text'>
+	<input id='wordbox' type='text' onkeypress="checkword()">
+	<div id='statusbox'></div>
 </body>
+<script>
+function createXmlHttp() {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+	  xmlhttp = new XMLHttpRequest();
+	} else {
+	  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	if (!(xmlhttp)) {
+	  alert("Your browser does not support AJAX!");
+	}
+	 return xmlhttp;
+}
+
+// use the given xmlHttp object to send the given parameters to the 
+// target URL.  parameters should be a URL formatted string.
+function getRequest(xmlHttp, target) {
+  if (xmlHttp) {
+    xmlHttp.open("Get",target,true);
+    //xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.send();
+   }
+}
+
+function checkword() {
+	var wordbox = document.getElementById("wordbox");
+	var word = wordbox.value;
+	var statusbox = document.getElementById("statusbox")
+
+	var xmlhttp = createXmlHttp()
+	xmlhttp.onreadystatechange = function() {
+		if(xmlhttp.readyState==4) {
+			statusbox.innerHTML = xmlhttp.responseText
+		}
+	}
+
+	getRequest(xmlhttp, "/check?word="+word);
+}
+</script>
 </html>

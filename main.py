@@ -21,6 +21,7 @@ import cgi
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import ndb
+from wordslist import words
 
 def render_template(handler, templatename, templatevalues={}):
   path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
@@ -139,12 +140,26 @@ class WordCheckerHandler(webapp2.RequestHandler):
   def get(self):
     render_template(self, 'wordchecker.html', {})
 
+###############################################################################
+class CheckWordHandler(webapp2.RequestHandler):
+  def get(self):
+    word = self.request.get('word')
+    if word in words:
+      self.response.out.write('true')
+    else:
+      self.response.out.write('false')
+      
+  def post(self):
+    return self.get()
+
+
 
 mappings = [
   ('/', MainHandler),
   ('/viewprofile', viewprofileHandler),
   ('/editprofile', editprofileHandler),
   ('/edit', editedHandler),
-  ('/words', WordCheckerHandler)
+  ('/words', WordCheckerHandler),
+  ('/check', CheckWordHandler)
   ]
 app = webapp2.WSGIApplication(mappings, debug=True)
