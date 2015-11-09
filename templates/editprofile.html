@@ -1,0 +1,37 @@
+<html>
+<body>
+	{% if user %}
+	<a href="{{ logout }}">Log Out</a>
+	{% else %}
+	<a href="{{ login }}">Log In</a>
+	{% endif %}
+
+	<br />
+	<h2>EDIT PROFILE</h2>
+	<br />
+
+	<form action="/edit" method="post">
+	{% if user and name %}
+	Name:<br>
+	<input type="text" name="name" value="{{ name }}">
+	{% else %}
+	Name:<br>
+	<input name="name" type="text">
+	{% endif %}
+	<br />
+	{% if user and hobby %}
+	Hobbies:<br>
+	<input type="text" name="hobby" value="{{ hobby }}">
+	{% else %}
+	Hobbies:<br>
+	<input type="text" name="hobby">
+	{% endif %}
+	<br />
+	{% if user and modified %}
+	Last modified:{{ modified }}
+	{% endif %}
+	<input type="submit" value="submit">
+	</form>
+</body>
+</body>
+</html>

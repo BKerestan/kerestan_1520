@@ -1,0 +1,28 @@
+<html>
+<body>
+	{% if user %}
+	<a href="{{ logout }}">Log Out</a>
+	<a href="/editprofile">Edit My Profile</a>
+	{% else %}
+	<a href="{{ login }}">Log In</a>
+	{% endif %}
+
+	<br />
+	<h2>VIEW PROFILE</h2>
+	<br />
+
+	{% if user and name %}
+	{{ name }}
+	{% endif %}
+	<br />
+	{% if user and hobby %}
+	{{ hobby }}
+	{% endif %}
+	<br />
+	{% if user and modified %}
+	{{ modified }}
+	{% endif %}
+
+</body>
+</body>
+</html>
