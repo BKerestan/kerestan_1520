@@ -135,11 +135,16 @@ class editedHandler(webapp2.RequestHandler):
 
     self.redirect("/viewprofile?id=" + user.user_id())
 
+class WordCheckerHandler(webapp2.RequestHandler):
+  def get(self):
+    render_template(self, 'wordchecker.html', {})
+
 
 mappings = [
   ('/', MainHandler),
   ('/viewprofile', viewprofileHandler),
   ('/editprofile', editprofileHandler),
-  ('/edit', editedHandler)
+  ('/edit', editedHandler),
+  ('/words', WordCheckerHandler)
   ]
 app = webapp2.WSGIApplication(mappings, debug=True)
