@@ -1,6 +1,6 @@
 <html>
 <body>
-	<input id='wordbox' type='text' onkeypress="checkword()">
+	<input id='wordbox' type='text' onkeyup="checkword()">
 	<div id='statusbox'></div>
 </body>
 <script>
@@ -35,7 +35,12 @@ function checkword() {
 	var xmlhttp = createXmlHttp()
 	xmlhttp.onreadystatechange = function() {
 		if(xmlhttp.readyState==4) {
-			statusbox.innerHTML = xmlhttp.responseText
+			if(xmlhttp.responseText == "true") {
+				statusbox.innerHTML = "This is a word"
+			}
+			else {
+				statusbox.innerHTML = "This is not a word"
+			}
 		}
 	}
 

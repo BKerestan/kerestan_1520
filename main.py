@@ -144,6 +144,7 @@ class WordCheckerHandler(webapp2.RequestHandler):
 class CheckWordHandler(webapp2.RequestHandler):
   def get(self):
     word = self.request.get('word')
+    logging.info(word)
     if word in words:
       self.response.out.write('true')
     else:
