@@ -180,7 +180,11 @@ class CheckWordHandler(webapp2.RequestHandler):
   def post(self):
     return self.get()
 
-
+class emailmessageHandler(webapp2.RequestHandler):
+  def get(self):
+    message = self.request.get('message')
+    mail.send_mail("Ben@kerestan1520.appspotmail.com", "ben.kerestan@gmail.com", message)
+    return True
 
 mappings = [
   ('/', MainHandler),
@@ -189,6 +193,7 @@ mappings = [
   ('/edit', editedHandler),
   ('/words', WordCheckerHandler),
   ('/check', CheckWordHandler),
-  ('/cron', CronHandler)
+  ('/cron', CronHandler),
+  ('/email', emailmessageHandler)
   ]
 app = webapp2.WSGIApplication(mappings, debug=True)
