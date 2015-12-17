@@ -22,6 +22,8 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from wordslist import words
+from google.appengine.api import mail
+
 
 class Account(ndb.Model):
   name = ndb.StringProperty()
@@ -180,11 +182,19 @@ class CheckWordHandler(webapp2.RequestHandler):
   def post(self):
     return self.get()
 
+###############################################################################
+
 class emailmessageHandler(webapp2.RequestHandler):
   def get(self):
     message = self.request.get('message')
-    mail.send_mail("Ben@kerestan1520.appspotmail.com", "ben.kerestan@gmail.com", message)
-    return True
+    mail.send_mail("Ben@kerestan-1520.appspotmail.com", "ben.kerestan@gmail.com", "message from about me", message)
+    self.response.out.write("true")
+
+###############################################################################
+
+class aboutmehandler(webapp2.RequestHandler):
+  def get(self):
+    render_template(self,"aboutme.html", {})
 
 mappings = [
   ('/', MainHandler),
@@ -194,6 +204,7 @@ mappings = [
   ('/words', WordCheckerHandler),
   ('/check', CheckWordHandler),
   ('/cron', CronHandler),
-  ('/email', emailmessageHandler)
+  ('/email', emailmessageHandler),
+  ('/aboutme', aboutmehandler)
   ]
 app = webapp2.WSGIApplication(mappings, debug=True)
