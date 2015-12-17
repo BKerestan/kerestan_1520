@@ -23,6 +23,14 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from wordslist import words
 
+class Account(ndb.Model):
+  name = ndb.StringProperty()
+  hobby_text = ndb.StringProperty()
+  modified = ndb.DateTimeProperty(auto_now_add=True)
+
+class Cron_Status(ndb.Model):
+  status = ndb.BooleanProperty()
+
 def render_template(handler, templatename, templatevalues={}):
   path = os.path.join(os.path.dirname(__file__), 'templates/' + templatename)
   html = template.render(path, templatevalues)
@@ -35,10 +43,7 @@ def get_email():
     email = user.email()
   return email
 
-class Account(ndb.Model):
-  name = ndb.StringProperty()
-  hobby_text = ndb.StringProperty()
-  modified = ndb.DateTimeProperty(auto_now_add=True)
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -75,6 +80,7 @@ class MainHandler(webapp2.RequestHandler):
         "logout":users.create_logout_url('/')
         }
         render_template(self, 'index.html', template_params)
+###############################################################################
 
 class viewprofileHandler(webapp2.RequestHandler):
   def get(self):
@@ -101,6 +107,7 @@ class viewprofileHandler(webapp2.RequestHandler):
     }
 
     render_template(self, 'viewprofile.html', template_params)
+###############################################################################
 
 class editprofileHandler(webapp2.RequestHandler):
   def get(self):
@@ -121,6 +128,7 @@ class editprofileHandler(webapp2.RequestHandler):
         }
 
         render_template(self, 'editprofile.html', template_params)
+###############################################################################
 
 class editedHandler(webapp2.RequestHandler):
   def post(self):
@@ -136,9 +144,28 @@ class editedHandler(webapp2.RequestHandler):
 
     self.redirect("/viewprofile?id=" + user.user_id())
 
+###############################################################################
+
+
 class WordCheckerHandler(webapp2.RequestHandler):
   def get(self):
     render_template(self, 'wordchecker.html', {})
+
+
+###############################################################################
+class CronHandler(webapp2.RequestHandler):
+  def get(self):
+    #grab the status object from ndb
+    cronstatus = Cron_Status.query().get()
+    #if it does not exist, create it and initialize it to false
+    if not cronstatus:
+          logging.info("cron not found, creating!")
+          cronstatus = Cron_Status(status=False)
+          cron_status_key = cronstatus.put()
+
+    template_params={"status":cronstatus.status}
+    render_template(self, 'cronpage.html', template_params)
+
 
 ###############################################################################
 class CheckWordHandler(webapp2.RequestHandler):
@@ -161,6 +188,7 @@ mappings = [
   ('/editprofile', editprofileHandler),
   ('/edit', editedHandler),
   ('/words', WordCheckerHandler),
-  ('/check', CheckWordHandler)
+  ('/check', CheckWordHandler),
+  ('/cron', CronHandler)
   ]
 app = webapp2.WSGIApplication(mappings, debug=True)

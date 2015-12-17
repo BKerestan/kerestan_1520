@@ -1,0 +1,5 @@
+cron:
+- description: weekly email
+  url: /tasks/weeklyemail
+  schedule: every sunday 06:00
+  timezone: America/New_York

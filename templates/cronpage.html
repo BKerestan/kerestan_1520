@@ -1,0 +1,53 @@
+<html>
+<body>
+	Email is: <button id='emailbutton' onclick='toggleCron()'>
+	{% if status %}
+	On
+	{% else %}
+	Off
+	{% endif %}
+</button>
+</form>
+</body>
+<script>
+function createXmlHttp() {
+	var xmlhttp;
+	if (window.XMLHttpRequest) {
+	  xmlhttp = new XMLHttpRequest();
+	} else {
+	  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	if (!(xmlhttp)) {
+	  alert("Your browser does not support AJAX!");
+	}
+	 return xmlhttp;
+}
+
+// use the given xmlHttp object to send the given parameters to the 
+// target URL.  parameters should be a URL formatted string.
+function getRequest(xmlHttp, target) {
+  if (xmlHttp) {
+    xmlHttp.open("Get",target,true);
+    //xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.send();
+   }
+}
+
+function toggleCron() {
+	var xmlhttp = createXmlHttp()
+	xmlhttp.onreadystatechange = function() {
+		if(xmlhttp.readyState==4) {
+			if(xmlhttp.responseText == "true") {
+				document.getElementById("emailbutton").innerHTML = "On"
+			}
+			else {
+				document.getElementById("emailbutton").innerHTML = "Off"
+			}
+		}
+	}
+
+	getRequest(xmlhttp, "/tasks/toggle");
+}
+
+</script>
+</html>
